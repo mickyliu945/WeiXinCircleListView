@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">WeiXinXListView</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- xlist view -->
+    <string name="xlistview_header_hint_normal">下拉检查更新</string>
+    <string name="xlistview_header_hint_ready">松开检查更新</string>
+    <string name="xlistview_header_hint_loading">正在检查更新&#8230;</string>
+    <string name="xlistview_header_last_time">最后更新：</string>
+    <string name="xlistview_header_hint_refresh_nomal">下拉可以刷新</string>
+    <string name="xlistview_header_hint_refresh_ready">松开可以刷新</string>
+    <string name="xlistview_header_hint_refresh_loading">正在刷新&#8230;</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+</resources>
