@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/xlistview_header_content"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="200dp">
 
         <LinearLayout
             android:id="@+id/xlistview_header_text"
@@ -17,33 +17,11 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/xlistview_header_hint_textview"
-                android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/xlistview_header_hint_normal"
-                android:textColor="@color/black" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/xlistview_header_last_time"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/xlistview_header_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                android:scaleType="centerCrop"
+                android:background="@mipmap/wz_t_title_bg"/>
         </LinearLayout>
 
         <ImageView
@@ -55,16 +33,6 @@
             android:layout_centerVertical="true"
             android:visibility="gone"
             android:background="@anim/spinner" />
-
-        <ImageView
-            android:id="@+id/xlistview_header_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/xlistview_header_text"
-            android:layout_marginRight="30dp"
-            android:layout_centerVertical="true"
-            android:contentDescription="@null"
-            android:src="@drawable/arrow_down" />
 
     </RelativeLayout>
 </LinearLayout>

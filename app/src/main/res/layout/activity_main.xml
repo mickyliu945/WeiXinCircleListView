@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.micky.weixinxlistview.MainActivity"
-    tools:showIn="@layout/activity_main">
-    <com.micky.weixinxlistview.xlistview.XScrollView
-        android:id="@+id/scroll_view"
+    android:orientation="vertical">
+
+    <com.micky.weixinxlistview.xlistview.XListView
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-</RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="#282828">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"
+            android:text="@string/friend_circle"/>
+    </LinearLayout>
+
+</FrameLayout>

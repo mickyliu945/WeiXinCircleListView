@@ -10,23 +10,35 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.micky.weixinxlistview.xlistview.XListView;
 import com.micky.weixinxlistview.xlistview.XScrollView;
 
-public class MainActivity extends AppCompatActivity implements XScrollView.IXScrollViewListener{
+import java.util.ArrayList;
+import java.util.List;
 
-    private XScrollView mScrollView;
+public class MainActivity extends AppCompatActivity implements XListView.IXListViewListener{
+
+    private XListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mScrollView = (XScrollView) findViewById(R.id.scroll_view);
-        mScrollView.setPullLoadEnable(false);
-        mScrollView.setPullRefreshEnable(true);
-        mScrollView.setIXScrollViewListener(this);
-        View contentView = getLayoutInflater().inflate(R.layout.content_main, null);
-        mScrollView.setView(contentView);
+        mListView = (XListView) findViewById(R.id.list_view);
+        mListView.setPullLoadEnable(true);
+        mListView.setPullRefreshEnable(true);
+        mListView.setXListViewListener(this);
+        UserAdapter adapter = new UserAdapter(this, initData());
+        mListView.setAdapter(adapter);
+    }
+
+    private List<String> initData() {
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < 100; i++) {
+            list.add("item-" + i);
+        }
+        return list;
     }
 
     @Override
@@ -34,13 +46,20 @@ public class MainActivity extends AppCompatActivity implements XScrollView.IXScr
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mScrollView.stopRefresh();
+                mListView.stopRefresh();
+                mListView.stopLoadMore();
             }
         }, 2000);
     }
 
     @Override
     public void onLoadMore() {
-
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mListView.stopRefresh();
+                mListView.stopLoadMore();
+            }
+        }, 2000);
     }
 }

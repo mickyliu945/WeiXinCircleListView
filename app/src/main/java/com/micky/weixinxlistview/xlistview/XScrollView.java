@@ -89,7 +89,6 @@ public class XScrollView extends ScrollView implements OnScrollListener {
         mHeaderView = new XListViewHeader(context);
         mHeaderViewContent = (RelativeLayout) mHeaderView.findViewById(R.id
                 .xlistview_header_content);
-        mHeaderTimeView = (TextView) mHeaderView.findViewById(R.id.xlistview_header_time);
         addHeaderView(mHeaderView);
 
         // init footer view
