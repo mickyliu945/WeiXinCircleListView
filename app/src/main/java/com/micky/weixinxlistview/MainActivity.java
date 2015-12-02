@@ -2,40 +2,53 @@ package com.micky.weixinxlistview;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import com.micky.weixinxlistview.xlistview.XListView;
-import com.micky.weixinxlistview.xlistview.XScrollView;
+import com.micky.weixinxlistview.wlistview.RotateLayout;
+import com.micky.weixinxlistview.wlistview.WListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements XListView.IXListViewListener{
+/**
+ * @Project WeiXinXListView
+ * @Packate com.micky.weixinxlistview.xlistview
+ *
+ * @Description
+ *
+ * @Author Micky Liu
+ * @Email mickyliu@126.com
+ * @Date 2015-12-01 12:22
+ * @Version 0.1
+ */
+public class MainActivity extends AppCompatActivity implements WListView.IWListViewListener{
 
-    private XListView mListView;
+    private WListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mListView = (XListView) findViewById(R.id.list_view);
+        mListView = (WListView) findViewById(R.id.list_view);
         mListView.setPullLoadEnable(true);
-        mListView.setPullRefreshEnable(true);
-        mListView.setXListViewListener(this);
+        mListView.setWListViewListener(this);
         UserAdapter adapter = new UserAdapter(this, initData());
         mListView.setAdapter(adapter);
+
+        RotateLayout rotateLayout = (RotateLayout) findViewById(R.id.rotate_layout);
+        mListView.setRotateLayout(rotateLayout);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mListView.autoRefresh();
     }
 
     private List<String> initData() {
         List<String> list = new ArrayList<String>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 15; i++) {
             list.add("item-" + i);
         }
         return list;
@@ -49,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements XListView.IXListV
                 mListView.stopRefresh();
                 mListView.stopLoadMore();
             }
-        }, 2000);
+        }, 3000);
     }
 
     @Override
@@ -60,6 +73,6 @@ public class MainActivity extends AppCompatActivity implements XListView.IXListV
                 mListView.stopRefresh();
                 mListView.stopLoadMore();
             }
-        }, 2000);
+        }, 3000);
     }
 }

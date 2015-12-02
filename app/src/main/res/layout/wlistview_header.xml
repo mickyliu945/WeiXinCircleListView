@@ -24,15 +24,5 @@
                 android:background="@mipmap/wz_t_title_bg"/>
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/xlistview_header_progressbar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_toLeftOf="@id/xlistview_header_text"
-            android:layout_marginRight="30dp"
-            android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:background="@anim/spinner" />
-
     </RelativeLayout>
 </LinearLayout>

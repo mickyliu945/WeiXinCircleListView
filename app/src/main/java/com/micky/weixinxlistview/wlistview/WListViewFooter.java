@@ -1,4 +1,4 @@
-package com.micky.weixinxlistview.xlistview;
+package com.micky.weixinxlistview.wlistview;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
@@ -13,7 +13,18 @@ import android.widget.TextView;
 
 import com.micky.weixinxlistview.R;
 
-public class XListViewFooter extends LinearLayout {
+/**
+ * @Project WeiXinXListView
+ * @Packate com.micky.weixinxlistview.xlistview
+ *
+ * @Description ListView Footer (加载更多)
+ *
+ * @Author Micky Liu
+ * @Email mickyliu@126.com
+ * @Date 2015-12-01 14:08
+ * @Version 0.1
+ */
+public class WListViewFooter extends LinearLayout {
     public final static int STATE_NORMAL = 0;
     public final static int STATE_READY = 1;
     public final static int STATE_LOADING = 2;
@@ -23,7 +34,6 @@ public class XListViewFooter extends LinearLayout {
     private View mLayout;
     private ImageView mProgressBar;
     private TextView mHintView;
-    //private ImageView mHintImage;
 
     private Animation mRotateUpAnim;
     private Animation mRotateDownAnim;
@@ -31,12 +41,12 @@ public class XListViewFooter extends LinearLayout {
     private final int ROTATE_ANIM_DURATION = 180;
     private int mState = STATE_NORMAL;
 
-    public XListViewFooter(Context context) {
+    public WListViewFooter(Context context) {
         super(context);
         initView(context);
     }
 
-    public XListViewFooter(Context context, AttributeSet attrs) {
+    public WListViewFooter(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
@@ -46,8 +56,6 @@ public class XListViewFooter extends LinearLayout {
             return;
         
         if (state == STATE_LOADING) {
-//            mHintImage.clearAnimation();
-//            mHintImage.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.VISIBLE);
             mHintView.setVisibility(View.INVISIBLE);
 
@@ -55,7 +63,6 @@ public class XListViewFooter extends LinearLayout {
             spinner.start();
         } else {
             mHintView.setVisibility(View.VISIBLE);
-//            mHintImage.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.INVISIBLE);
 
             AnimationDrawable spinner = (AnimationDrawable) mProgressBar.getBackground();
@@ -64,19 +71,11 @@ public class XListViewFooter extends LinearLayout {
         
         switch (state) {
         case STATE_NORMAL:
-//            if (mState == STATE_READY) {
-//                mHintImage.startAnimation(mRotateDownAnim);
-//            }
-//            if (mState == STATE_LOADING) {
-//                mHintImage.clearAnimation();
-//            }
-            mHintView.setText(R.string.xlistview_footer_hint_normal);
+            mHintView.setText(R.string.wlistview_footer_hint_normal);
             break;
         case STATE_READY:
             if (mState != STATE_READY) {
-//                mHintImage.clearAnimation();
-//                mHintImage.startAnimation(mRotateUpAnim);
-                mHintView.setText(R.string.xlistview_footer_hint_ready);
+                mHintView.setText(R.string.wlistview_footer_hint_ready);
             }
             break;
         case STATE_LOADING:
@@ -100,25 +99,6 @@ public class XListViewFooter extends LinearLayout {
         return lp.bottomMargin;
     }
 
-    /**
-     * normal status
-     */
-    public void normal() {
-        mHintView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    /**
-     * loading status
-     */
-    public void loading() {
-        mHintView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * hide footer when disable pull load more
-     */
     public void hide() {
         LayoutParams lp = (LayoutParams) mLayout
                 .getLayoutParams();
@@ -126,9 +106,6 @@ public class XListViewFooter extends LinearLayout {
         mLayout.setLayoutParams(lp);
     }
 
-    /**
-     * show footer
-     */
     public void show() {
         LayoutParams lp = (LayoutParams) mLayout
                 .getLayoutParams();
@@ -138,15 +115,14 @@ public class XListViewFooter extends LinearLayout {
 
     private void initView(Context context) {
         mContext = context;
-        mLayout = LayoutInflater.from(mContext).inflate(R.layout.vw_xlistview_footer, null);
+        mLayout = LayoutInflater.from(mContext).inflate(R.layout.wlistview_footer, null);
         addView(mLayout);
         mLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT));
 
         mProgressBar = (ImageView) mLayout.findViewById(R.id.xlistview_footer_progressbar);
         mHintView = (TextView) mLayout.findViewById(R.id.xlistview_footer_hint_textview);
-//        mHintImage = (ImageView) mLayout
-//                .findViewById(R.id.xlistview_footer_hint_image);
+
 
         mRotateUpAnim = new RotateAnimation(0.0f, 180.0f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);

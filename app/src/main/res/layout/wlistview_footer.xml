@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/xlistview_footer_hint_normal"
+            android:text="@string/wlistview_footer_hint_normal"
             android:textColor="@color/title_color" />
 
         <ImageView
@@ -32,7 +32,6 @@
             android:layout_marginRight="30dp"
             android:layout_toLeftOf="@id/xlistview_footer_hint_textview"
             android:contentDescription="@null"
-            android:src="@drawable/arrow_up"
             android:visibility="gone" />
     </RelativeLayout>
 

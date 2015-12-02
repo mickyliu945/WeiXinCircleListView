@@ -10,7 +10,15 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by MickyLiu on 2015/12/2.
+ * @Project WeiXinXListView
+ * @Packate com.micky.weixinxlistview.xlistview
+ *
+ * @Description
+ *
+ * @Author Micky Liu
+ * @Email mickyliu@126.com
+ * @Date 2015-12-01 12:30
+ * @Version 0.1
  */
 public class UserAdapter extends BaseAdapter {
 
