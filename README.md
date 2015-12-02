@@ -1,10 +1,13 @@
 <h2>类似微信朋友圈下拉刷新效果<h2>
 </br>
-</br>
  ![](https://github.com/mickyliu945/WeiXinCircleListView/blob/master/Screenshots/a.png)
 </br>
 </br>
+</br>
+</br>
  ![](https://github.com/mickyliu945/WeiXinCircleListView/blob/master/Screenshots/b.png)
+</br>
+</br>
 </br>
 </br>
  <p>参考了下拉刷新控件（Maxwin-z/XListView-Android)<p>
