@@ -4,6 +4,8 @@
 <p>
  ![](https://github.com/mickyliu945/WeiXinCircleListView/blob/master/Screenshots/a.png)
  <p>
+ <p>
+ <p>
  ![](https://github.com/mickyliu945/WeiXinCircleListView/blob/master/Screenshots/b.png)
  
  <p>
