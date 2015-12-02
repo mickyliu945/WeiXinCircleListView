@@ -3,4 +3,4 @@
 
  ![](https://github.com/mickyliu945/WeiXinCircleListView/raw/master/Screenshots/a.jpg)
  ![](https://github.com/mickyliu945/WeiXinCircleListView/raw/master/Screenshots/b.jpg)
- ![](http://jingyan.baidu.com/activity/tcbj2015)
+ ![](http://www.cosos.cn/outservice/public/images/index/1.jpg)
