@@ -196,7 +196,7 @@ public class WListView extends ListView implements OnScrollListener {
                 final float deltaY = ev.getRawY() - mLastY;
                 mLastY = ev.getRawY();
                 if (getFirstVisiblePosition() == 0 && (mHeaderView.getVisiableHeight() > 0 || deltaY > 0)) {
-                    if (mHeaderView.getVisiableHeight() >= mHeaderViewHeight && mHeaderView.getY()  == 0) {
+                    if (mHeaderView.getVisiableHeight() >= mHeaderViewHeight && mHeaderView.getTop()  == 0) {
                         updateHeaderHeight(deltaY / OFFSET_RADIO);
                        if (mHeaderView.getVisiableHeight() >= (mHeaderViewHeight + PULL_REFRESH_DELTA)) {
                            mRotateLayout.showRotate();
