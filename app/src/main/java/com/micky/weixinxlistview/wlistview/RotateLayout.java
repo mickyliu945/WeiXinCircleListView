@@ -66,8 +66,6 @@ public class RotateLayout extends LinearLayout {
     public void rotateAnimation() {
         if (mShowed) {
             RotateAnimation animation = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            LinearInterpolator lin = new LinearInterpolator();
-            animation.setInterpolator(lin);
             animation.setDuration(1000);
             animation.setRepeatCount(-1);
             animation.setFillAfter(true);

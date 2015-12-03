@@ -7,7 +7,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
@@ -36,8 +35,6 @@ public class WListView extends ListView implements OnScrollListener {
 
     private float mLastY = -1;
     private Scroller mScroller;
-    private OnScrollListener mScrollListener;
-
     private IWListViewListener mListViewListener;
 
 
@@ -48,7 +45,6 @@ public class WListView extends ListView implements OnScrollListener {
     private boolean mPullRefreshing = false;
 
     private WListViewFooter mFooterView;
-    private boolean mEnablePullLoad;
     private boolean mPullLoading;
     private boolean mIsFooterReady = false;
 
@@ -58,16 +54,16 @@ public class WListView extends ListView implements OnScrollListener {
     private final static int SCROLLBACK_FOOTER = 1;
 
     private final static int SCROLL_DURATION = 400;
-    private final static int PULL_LOAD_MORE_DELTA = 50;
+    private final static int PULL_LOAD_MORE_DELTA = 150;
+    private final static int PULL_REFRESH_DELTA = 100;
 
     private final static float OFFSET_RADIO = 1.8f;
-    private final static int DISTANCE_PULL_REFRESH = 150;
 
 
     private LinearLayout footerPl;
 
     private RotateLayout mRotateLayout;
-
+    private int mLastItem = 0;
 
     public WListView(Context context) {
         super(context);
@@ -85,7 +81,7 @@ public class WListView extends ListView implements OnScrollListener {
     }
 
     private void initWithContext(Context context) {
-        setOverScrollMode(ListView.OVER_SCROLL_NEVER);
+//        setOverScrollMode(ListView.OVER_SCROLL_NEVER);
 
         DisplayMetrics metrics =  ViewUtils.getScreenInfo(context);
         mHeaderViewHeight = (int) (60 * metrics.density);
@@ -132,27 +128,6 @@ public class WListView extends ListView implements OnScrollListener {
         mRotateLayout = rotateLayout;
     }
 
-    public void setPullLoadEnable(boolean enable) {
-        mEnablePullLoad = enable;
-        if (!mEnablePullLoad) {
-            mFooterView.setBottomMargin(0);
-            mFooterView.hide();
-            mFooterView.setPadding(0, 0, 0, mFooterView.getHeight() * (-1));
-            mFooterView.setOnClickListener(null);
-        } else {
-            mPullLoading = false;
-            mFooterView.setPadding(0, 0, 0, 0);
-            mFooterView.show();
-            mFooterView.setState(WListViewFooter.STATE_NORMAL);
-            mFooterView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startLoadMore();
-                }
-            });
-        }
-    }
-
     public void stopRefresh() {
         if (mPullRefreshing) {
             mPullRefreshing = false;
@@ -186,13 +161,7 @@ public class WListView extends ListView implements OnScrollListener {
 
     private void updateFooterHeight(float delta) {
         int height = mFooterView.getBottomMargin() + (int) delta;
-        if (mEnablePullLoad && !mPullLoading) {
-            if (height > PULL_LOAD_MORE_DELTA) {
-                mFooterView.setState(WListViewFooter.STATE_READY);
-            } else {
-                mFooterView.setState(WListViewFooter.STATE_NORMAL);
-            }
-        }
+        System.out.println(height);
         mFooterView.setBottomMargin(height);
     }
 
@@ -229,22 +198,24 @@ public class WListView extends ListView implements OnScrollListener {
                 if (getFirstVisiblePosition() == 0 && (mHeaderView.getVisiableHeight() > 0 || deltaY > 0)) {
                     if (mHeaderView.getVisiableHeight() >= mHeaderViewHeight && mHeaderView.getY()  == 0) {
                         updateHeaderHeight(deltaY / OFFSET_RADIO);
-                       if (mHeaderView.getVisiableHeight() >= (mHeaderViewHeight + DISTANCE_PULL_REFRESH)) {
+                       if (mHeaderView.getVisiableHeight() >= (mHeaderViewHeight + PULL_REFRESH_DELTA)) {
                            mRotateLayout.showRotate();
-                           mRotateLayout.rotate(-2 * (int)deltaY);
+                           mRotateLayout.rotate(-2 * (int) deltaY);
                            if (mListViewListener != null && !mPullRefreshing) {
                                mPullRefreshing = true;
                                mListViewListener.onRefresh();
                            }
+                       } else {
+//                           resetHeaderHeight();
                        }
-                    } else {
-                        resetHeaderHeight();
                     }
-                } else if (getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getBottomMargin() > 0 )) {
-                    updateFooterHeight(-deltaY / OFFSET_RADIO);
                 }
-                System.out.println(mHeaderView.getY() +"-" + mHeaderView.getTop() + " - " + DISTANCE_PULL_REFRESH);
-                if (mHeaderView.getTop() <= (DISTANCE_PULL_REFRESH * -0.5)) {
+                if (deltaY < 0 && getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getBottomMargin() >= 0 )) {
+                    updateFooterHeight(-deltaY / OFFSET_RADIO);
+//                    mFooterView.setState(WListViewFooter.STATE_READY);
+                }
+
+                if (mHeaderView.getTop() <= (PULL_REFRESH_DELTA * -0.5)) {
                     mRotateLayout.stopAnimation();
                 }
                 break;
@@ -252,25 +223,26 @@ public class WListView extends ListView implements OnScrollListener {
                 mLastY = -1;
                 if (getFirstVisiblePosition() == 0) {
 
-                    if (mHeaderView.getVisiableHeight() >= (mHeaderViewHeight + DISTANCE_PULL_REFRESH) && !mPullRefreshing) {
+                    if (mHeaderView.getVisiableHeight() >= (mHeaderViewHeight + PULL_REFRESH_DELTA) && !mPullRefreshing) {
                         mPullRefreshing = true;
                         if (mListViewListener != null && !mPullRefreshing) {
                             mListViewListener.onRefresh();
                         }
                     }
                     resetHeaderHeight();
-                } else if (getLastVisiblePosition() == mTotalItemCount - 1) {
-                    if (mEnablePullLoad && mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA) {
-                        startLoadMore();
-                    }
-                    resetFooterHeight();
                 }
+                resetFooterHeight();
+//                if ((getLastVisiblePosition() == mTotalItemCount - 1)) {
+//                    if (mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA) {
+//                        startLoadMore();
+//                    }
+//                    resetFooterHeight();
+//                }
                 mRotateLayout.rotateAnimation();
                 break;
         }
         return super.onTouchEvent(ev);
     }
-
 
     public void autoRefresh() {
         mPullRefreshing = true;
@@ -294,24 +266,22 @@ public class WListView extends ListView implements OnScrollListener {
     }
 
     @Override
-    public void setOnScrollListener(OnScrollListener l) {
-        mScrollListener = l;
-    }
-
-    @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (mScrollListener != null) {
-            mScrollListener.onScrollStateChanged(view, scrollState);
+        if (scrollState == SCROLL_STATE_IDLE) {
+            if (mLastItem == getCount() - 1) {
+                startLoadMore();
+                setSelection(getCount());
+            }
+            if (mFooterView != null && mFooterView.getState() != WListViewFooter.STATE_LOADING) {
+                mFooterView.setState(WListViewFooter.STATE_NORMAL);
+            }
         }
     }
-
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                          int totalItemCount) {
         mTotalItemCount = totalItemCount;
-        if (mScrollListener != null) {
-            mScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-        }
+        mLastItem = firstVisibleItem + visibleItemCount - 1;
     }
 
     public void setWListViewListener(IWListViewListener l) {

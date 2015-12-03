@@ -23,7 +23,11 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity implements WListView.IWListViewListener{
 
+    private static final int PAGE_SIZE = 10;
+
     private WListView mListView;
+    private UserAdapter mUserAdapter;
+    private int mCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +35,11 @@ public class MainActivity extends AppCompatActivity implements WListView.IWListV
         setContentView(R.layout.activity_main);
 
         mListView = (WListView) findViewById(R.id.list_view);
-        mListView.setPullLoadEnable(true);
         mListView.setWListViewListener(this);
-        UserAdapter adapter = new UserAdapter(this, initData());
-        mListView.setAdapter(adapter);
+        mUserAdapter = new UserAdapter(this);
+        mListView.setAdapter(mUserAdapter);
+
+        mUserAdapter.appendData(loadData());
 
         RotateLayout rotateLayout = (RotateLayout) findViewById(R.id.rotate_layout);
         mListView.setRotateLayout(rotateLayout);
@@ -46,9 +51,15 @@ public class MainActivity extends AppCompatActivity implements WListView.IWListV
         mListView.autoRefresh();
     }
 
-    private List<String> initData() {
+    private List<String> loadData() {
+        return loadData(mCount++);
+    }
+
+    private List<String> loadData(int page) {
         List<String> list = new ArrayList<String>();
-        for (int i = 0; i < 15; i++) {
+        int start = page * PAGE_SIZE;
+        int end = (page + 1) * PAGE_SIZE;
+        for (int i = start; i < end; i++) {
             list.add("item-" + i);
         }
         return list;
@@ -70,9 +81,10 @@ public class MainActivity extends AppCompatActivity implements WListView.IWListV
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                mUserAdapter.appendData(loadData());
                 mListView.stopRefresh();
                 mListView.stopLoadMore();
             }
-        }, 3000);
+        }, 5000);
     }
 }

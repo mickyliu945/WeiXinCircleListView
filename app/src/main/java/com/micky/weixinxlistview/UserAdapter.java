@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +24,15 @@ import java.util.List;
 public class UserAdapter extends BaseAdapter {
 
     private LayoutInflater mLayoutInflater;
-    private List<String> mDataList;
+    private List<String> mDataList = new ArrayList<String>();
 
-    public UserAdapter(Context context, List<String> list) {
+    public UserAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
-        mDataList = list;
+    }
+
+    public void appendData(List<String> list) {
+        mDataList.addAll(list);
+        notifyDataSetChanged();
     }
 
     @Override

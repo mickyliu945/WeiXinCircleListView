@@ -3,9 +3,11 @@ package com.micky.weixinxlistview.wlistview;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,12 +35,6 @@ public class WListViewFooter extends LinearLayout {
 
     private View mLayout;
     private ImageView mProgressBar;
-    private TextView mHintView;
-
-    private Animation mRotateUpAnim;
-    private Animation mRotateDownAnim;
-
-    private final int ROTATE_ANIM_DURATION = 180;
     private int mState = STATE_NORMAL;
 
     public WListViewFooter(Context context) {
@@ -52,34 +48,18 @@ public class WListViewFooter extends LinearLayout {
     }
 
     public void setState(int state) {
-        if (state == mState)
+        if (state == mState) {
             return;
-        
-        if (state == STATE_LOADING) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mHintView.setVisibility(View.INVISIBLE);
-
-            AnimationDrawable spinner = (AnimationDrawable) mProgressBar.getBackground();
-            spinner.start();
-        } else {
-            mHintView.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.INVISIBLE);
-
-            AnimationDrawable spinner = (AnimationDrawable) mProgressBar.getBackground();
-            spinner.stop();
         }
-        
         switch (state) {
-        case STATE_NORMAL:
-            mHintView.setText(R.string.wlistview_footer_hint_normal);
-            break;
-        case STATE_READY:
-            if (mState != STATE_READY) {
-                mHintView.setText(R.string.wlistview_footer_hint_ready);
-            }
-            break;
-        case STATE_LOADING:
-            break;
+            case STATE_READY:
+                mLayout.setVisibility(View.INVISIBLE);
+                break;
+            case STATE_LOADING:
+                show();
+                break;
+            default:
+                hide();
         }
         mState = state;
     }
@@ -87,51 +67,55 @@ public class WListViewFooter extends LinearLayout {
     public void setBottomMargin(int height) {
         if (height < 0)
             return;
-        LayoutParams lp = (LayoutParams) mLayout
-                .getLayoutParams();
+        LayoutParams lp = (LayoutParams) mLayout.getLayoutParams();
         lp.bottomMargin = height;
+        lp.gravity = Gravity.CENTER;
         mLayout.setLayoutParams(lp);
     }
 
     public int getBottomMargin() {
-        LayoutParams lp = (LayoutParams) mLayout
-                .getLayoutParams();
+        LayoutParams lp = (LayoutParams) mLayout.getLayoutParams();
         return lp.bottomMargin;
     }
 
     public void hide() {
-        LayoutParams lp = (LayoutParams) mLayout
-                .getLayoutParams();
+        LayoutParams lp = (LayoutParams) mLayout.getLayoutParams();
         lp.height = 0;
         mLayout.setLayoutParams(lp);
+        mLayout.setVisibility(View.INVISIBLE);
     }
 
     public void show() {
-        LayoutParams lp = (LayoutParams) mLayout
-                .getLayoutParams();
+        mLayout.setVisibility(View.VISIBLE);
+        LayoutParams lp = (LayoutParams) mLayout.getLayoutParams();
         lp.height = LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
         mLayout.setLayoutParams(lp);
+        startAnimation();
+    }
+
+    public int getState() {
+        return mState;
     }
 
     private void initView(Context context) {
         mContext = context;
         mLayout = LayoutInflater.from(mContext).inflate(R.layout.wlistview_footer, null);
-        addView(mLayout);
-        mLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT));
-
-        mProgressBar = (ImageView) mLayout.findViewById(R.id.xlistview_footer_progressbar);
-        mHintView = (TextView) mLayout.findViewById(R.id.xlistview_footer_hint_textview);
-
-
-        mRotateUpAnim = new RotateAnimation(0.0f, 180.0f, Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        mRotateUpAnim.setDuration(ROTATE_ANIM_DURATION);
-        mRotateUpAnim.setFillAfter(true);
-        mRotateDownAnim = new RotateAnimation(180.0f, 0.0f, Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        mRotateDownAnim.setDuration(ROTATE_ANIM_DURATION);
-        mRotateDownAnim.setFillAfter(true);
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.gravity = Gravity.CENTER;
+        addView(mLayout, lp);
+        mLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        mProgressBar = (ImageView) mLayout.findViewById(R.id.wlistview_footer_progressbar);
+        hide();
     }
 
+    public void startAnimation() {
+        RotateAnimation animation = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        LinearInterpolator lin = new LinearInterpolator();
+        animation.setInterpolator(lin);
+        animation.setDuration(800);
+        animation.setRepeatCount(-1);
+        animation.setFillAfter(true);
+        mProgressBar.startAnimation(animation);
+    }
 }
