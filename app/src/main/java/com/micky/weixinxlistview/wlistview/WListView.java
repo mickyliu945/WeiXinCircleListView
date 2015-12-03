@@ -161,7 +161,6 @@ public class WListView extends ListView implements OnScrollListener {
 
     private void updateFooterHeight(float delta) {
         int height = mFooterView.getBottomMargin() + (int) delta;
-        System.out.println(height);
         mFooterView.setBottomMargin(height);
     }
 
