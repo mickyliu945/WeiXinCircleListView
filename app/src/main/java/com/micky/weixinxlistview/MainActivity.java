@@ -19,7 +19,7 @@ import java.util.List;
  * @Author Micky Liu
  * @Email mickyliu@126.com
  * @Date 2015-12-01 12:22
- * @Version 0.1
+ * @Version 1.0
  */
 public class MainActivity extends AppCompatActivity implements WListView.IWListViewListener{
 

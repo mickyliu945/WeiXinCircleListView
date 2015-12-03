@@ -25,7 +25,7 @@ import com.micky.weixinxlistview.R;
  * @Author Micky Liu
  * @Email mickyliu@126.com
  * @Date 2015-12-02 13:07
- * @Version 0.1
+ * @Version 1.0
  */
 public class RotateLayout extends LinearLayout {
 

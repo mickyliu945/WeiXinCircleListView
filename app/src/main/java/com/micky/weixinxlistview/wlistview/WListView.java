@@ -30,7 +30,7 @@ import com.micky.weixinxlistview.utils.ViewUtils;
  * @Author Micky Liu
  * @Email mickyliu@126.com
  * @Date 2015-12-01 14:02
- * @Version 0.1
+ * @Version 1.0
  */
 public class WListView extends ListView implements OnScrollListener {
 
