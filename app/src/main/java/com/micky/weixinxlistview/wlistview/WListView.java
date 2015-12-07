@@ -75,8 +75,6 @@ public class WListView extends ListView implements OnScrollListener {
     }
 
     private void initWithContext(Context context) {
-//        setOverScrollMode(ListView.OVER_SCROLL_NEVER);
-
         DisplayMetrics metrics =  ViewUtils.getScreenInfo(context);
         mHeaderViewHeight = (int) (60 * metrics.density);
 
@@ -238,7 +236,8 @@ public class WListView extends ListView implements OnScrollListener {
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                          int totalItemCount) {
         mLastItem = firstVisibleItem + visibleItemCount - 1;
-        if (mFooterView != null && mFooterView.getState() != WListViewFooter.STATE_LOADING && mLastItem == getCount() - 1) {
+        if (mFooterView != null && mFooterView.getState() != WListViewFooter.STATE_LOADING
+                && totalItemCount > visibleItemCount && mLastItem == getCount() - 1) {
             startLoadMore();
         }
     }

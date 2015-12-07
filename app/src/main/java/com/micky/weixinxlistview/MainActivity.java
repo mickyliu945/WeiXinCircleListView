@@ -85,6 +85,6 @@ public class MainActivity extends AppCompatActivity implements WListView.IWListV
                 mListView.stopRefresh();
                 mListView.stopLoadMore();
             }
-        }, 5000);
+        }, 3000);
     }
 }
