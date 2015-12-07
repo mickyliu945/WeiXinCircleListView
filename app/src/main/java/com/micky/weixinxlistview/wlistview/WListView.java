@@ -45,16 +45,12 @@ public class WListView extends ListView implements OnScrollListener {
     private boolean mPullRefreshing = false;
 
     private WListViewFooter mFooterView;
-    private boolean mPullLoading;
-    private boolean mIsFooterReady = false;
-
     private int mTotalItemCount;
     private int mScrollBack;
     private final static int SCROLLBACK_HEADER = 0;
     private final static int SCROLLBACK_FOOTER = 1;
 
     private final static int SCROLL_DURATION = 400;
-    private final static int PULL_LOAD_MORE_DELTA = 150;
     private final static int PULL_REFRESH_DELTA = 100;
 
     private final static float OFFSET_RADIO = 1.8f;
@@ -117,10 +113,7 @@ public class WListView extends ListView implements OnScrollListener {
 
     @Override
     public void setAdapter(ListAdapter adapter) {
-        if (!mIsFooterReady) {
-            mIsFooterReady = true;
-            addFooterView(footerPl);
-        }
+        addFooterView(footerPl);
         super.setAdapter(adapter);
     }
 
@@ -136,10 +129,7 @@ public class WListView extends ListView implements OnScrollListener {
     }
 
     public void stopLoadMore() {
-        if (mPullLoading) {
-            mPullLoading = false;
-            mFooterView.setState(WListViewFooter.STATE_NORMAL);
-        }
+        mFooterView.setState(WListViewFooter.STATE_NORMAL);
     }
 
     private void updateHeaderHeight(float delta) {
@@ -159,22 +149,7 @@ public class WListView extends ListView implements OnScrollListener {
         invalidate();
     }
 
-    private void updateFooterHeight(float delta) {
-        int height = mFooterView.getBottomMargin() + (int) delta;
-        mFooterView.setBottomMargin(height);
-    }
-
-    private void resetFooterHeight() {
-        int bottomMargin = mFooterView.getBottomMargin();
-        if (bottomMargin > 0) {
-            mScrollBack = SCROLLBACK_FOOTER;
-            mScroller.startScroll(0, bottomMargin, 0, -bottomMargin, SCROLL_DURATION);
-            invalidate();
-        }
-    }
-
     private void startLoadMore() {
-        mPullLoading = true;
         mFooterView.setState(WListViewFooter.STATE_LOADING);
         if (mListViewListener != null) {
             mListViewListener.onLoadMore();
@@ -209,10 +184,6 @@ public class WListView extends ListView implements OnScrollListener {
                        }
                     }
                 }
-                if (deltaY < 0 && getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getBottomMargin() >= 0 )) {
-                    updateFooterHeight(-deltaY / OFFSET_RADIO);
-//                    mFooterView.setState(WListViewFooter.STATE_READY);
-                }
 
                 if (mHeaderView.getTop() <= (PULL_REFRESH_DELTA * -0.5)) {
                     mRotateLayout.stopAnimation();
@@ -230,13 +201,6 @@ public class WListView extends ListView implements OnScrollListener {
                     }
                     resetHeaderHeight();
                 }
-                resetFooterHeight();
-//                if ((getLastVisiblePosition() == mTotalItemCount - 1)) {
-//                    if (mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA) {
-//                        startLoadMore();
-//                    }
-//                    resetFooterHeight();
-//                }
                 mRotateLayout.rotateAnimation();
                 break;
         }
@@ -249,7 +213,6 @@ public class WListView extends ListView implements OnScrollListener {
         mRotateLayout.showRotate();
         mRotateLayout.rotateAnimation();
     }
-
 
     @Override
     public void computeScroll() {
@@ -267,20 +230,18 @@ public class WListView extends ListView implements OnScrollListener {
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == SCROLL_STATE_IDLE) {
-            if (mLastItem == getCount() - 1) {
-                startLoadMore();
-                setSelection(getCount());
-            }
-            if (mFooterView != null && mFooterView.getState() != WListViewFooter.STATE_LOADING) {
-                mFooterView.setState(WListViewFooter.STATE_NORMAL);
-            }
+            view.invalidateViews();
         }
     }
+
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                          int totalItemCount) {
         mTotalItemCount = totalItemCount;
         mLastItem = firstVisibleItem + visibleItemCount - 1;
+        if (mFooterView != null && mFooterView.getState() != WListViewFooter.STATE_LOADING && mLastItem == getCount() - 1) {
+            startLoadMore();
+        }
     }
 
     public void setWListViewListener(IWListViewListener l) {
