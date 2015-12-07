@@ -45,10 +45,8 @@ public class WListView extends ListView implements OnScrollListener {
     private boolean mPullRefreshing = false;
 
     private WListViewFooter mFooterView;
-    private int mTotalItemCount;
     private int mScrollBack;
     private final static int SCROLLBACK_HEADER = 0;
-    private final static int SCROLLBACK_FOOTER = 1;
 
     private final static int SCROLL_DURATION = 400;
     private final static int PULL_REFRESH_DELTA = 100;
@@ -129,7 +127,9 @@ public class WListView extends ListView implements OnScrollListener {
     }
 
     public void stopLoadMore() {
-        mFooterView.setState(WListViewFooter.STATE_NORMAL);
+        if (mFooterView != null) {
+            mFooterView.setState(WListViewFooter.STATE_NORMAL);
+        }
     }
 
     private void updateHeaderHeight(float delta) {
@@ -237,7 +237,6 @@ public class WListView extends ListView implements OnScrollListener {
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                          int totalItemCount) {
-        mTotalItemCount = totalItemCount;
         mLastItem = firstVisibleItem + visibleItemCount - 1;
         if (mFooterView != null && mFooterView.getState() != WListViewFooter.STATE_LOADING && mLastItem == getCount() - 1) {
             startLoadMore();
